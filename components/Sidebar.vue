@@ -11,7 +11,9 @@
     <!-- User Info -->
     <div class="px-4 py-2 border-b border-gray-200">
       <div class="flex items-center gap-2">
-        <img :src="user.avatar" alt="User avatar" class="h-8 w-8 rounded-full" />
+        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+          <span>{{ user.name.split(' ').map(name => name[0]).join('') }}</span>
+        </div>
         <div>
           <p class="text-sm font-medium">{{ user.name }}</p>
           <p class="text-xs text-gray-500">{{ user.email }}</p>
@@ -67,7 +69,7 @@
           </a>
         </li>
         <li>
-          <a href="#" class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-100 text-pink-500">
+          <a href="#" class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-100 text-[#dab1b4]">
             <Icon name="ph:plus" />
             New tag
           </a>
@@ -81,6 +83,5 @@
 const user = {
   name: 'User Someuser',
   email: 'example@gmail.com',
-  avatar: 'https://via.placeholder.com/32'
 }
 </script> 

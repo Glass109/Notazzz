@@ -3,7 +3,7 @@
     <Sidebar />
     <Splitpanes class="default-theme" style="width: 100%">
       <Pane min-size="30">
-        <NoteList :notes="notelist" @create-note="createNote" @select-note="selectNote" />
+        <NoteList :notes="notelist" :isLoading="isLoading" @create-note="createNote" @select-note="selectNote" />
       </Pane>
       <Pane min-size="30" v-if="selectedNote">
         <NoteDetail
@@ -25,12 +25,14 @@ import { type Note } from '~/types/notes'
 import { useCookie } from 'nuxt/app'
 import { type User } from '~/types/users'
 
+const isLoading = ref(true)
 const selectedNote = ref<Note | null>(null)
 const notelist = ref<Note[]>([])
 const token = useCookie('token')
 const user = useCookie('user') as Ref<User>
 
 const fetchNotes = async () => {
+  isLoading.value = true
   const response = await fetch('http://localhost:5000/api/notes', {
     headers: {
       Authorization: `Bearer ${token.value}`
@@ -38,10 +40,22 @@ const fetchNotes = async () => {
   })
   const data = await response.json()
   notelist.value = data as Note[]
+  isLoading.value = false
 }
 
-const createNote = () => {
-  notelist.value.push(newNote.value)
+const createNote = async () => {
+  isLoading.value = true
+  const response = await fetch('http://localhost:5000/api/notes', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newNote.value)
+  })
+  const data = await response.json()
+  fetchNotes()
+  isLoading.value = false
 }
 
 const selectNote = (note: Note) => {

@@ -31,6 +31,7 @@
         </span>
         <button
           class="px-2 py-1 text-sm text-pink-500 hover:bg-pink-50 rounded-full flex items-center gap-1"
+          @click="addTag"
         >
           <Icon name="ph:plus" class="w-4 h-4" />
           Agregar etiqueta
@@ -69,4 +70,12 @@ import { ref } from 'vue'
 import { type Note } from '~/types/notes'
 const props = defineProps<{note: Note}>()
 
+const newTag = ref('')
+
+const addTag = () => {
+  let tag = prompt('Ingrese el nombre de la etiqueta')
+  if (tag) {
+    props.note.tags.push(tag)
+  }
+}
 </script> 
